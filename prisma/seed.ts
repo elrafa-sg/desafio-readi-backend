@@ -8,7 +8,8 @@ async function seedDatabase () {
             { email: 'cliente02@email.com', senha: 'senha02', role: 'CLIENTE' },
             { email: 'operador@email.com', senha: 'senha03', role: 'OPERADOR' },
             { email: 'administrador@email.com', senha: 'senha04', role: 'ADMINISTRADOR' }
-        ]
+        ],
+        skipDuplicates: true
     })
 }
 

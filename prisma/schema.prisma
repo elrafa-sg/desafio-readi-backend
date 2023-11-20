@@ -31,7 +31,7 @@ enum StatusSolicitacao {
 model Usuario {
   id          Int           @id @default(autoincrement())
   senha       String        @db.VarChar(255)
-  email       String        @db.VarChar(255)
+  email       String        @db.VarChar(255) @unique
   role        Role          @default(CLIENTE)
   Solicitacao Solicitacao[]
 }
@@ -48,7 +48,7 @@ model Solicitacao {
   numero         String             @db.VarChar(6)
   cidade         String             @db.VarChar(255)
   uf             String             @db.Char(2)
-  cep            String             @db.Char(6)
+  cep            String             @db.Char(8)
   certidao       Certidao           @default(CASAMENTO)
   urlCertidao    String?            @db.VarChar(255)
   status         StatusSolicitacao  @default(PENDENTE) 
