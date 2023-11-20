@@ -1,0 +1,24 @@
+# ETAPA DE BUILD
+FROM node:alpine AS builder
+
+WORKDIR /app
+
+COPY package.json package-lock.json tsconfig.json ./
+COPY src/ src/
+
+RUN npm ci
+RUN npm run build
+
+# ETAPA DE EXECUÇÃO 
+FROM node:alpine
+
+WORKDIR /app
+
+COPY package.json .
+COPY --from=builder ./app/dist ./dist
+
+RUN npm install --only=production
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
