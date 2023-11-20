@@ -10,7 +10,7 @@
     "prestart": "npx prisma migrate dev && npx prisma db seed && npm run swagger",
     "start": "node ./dist/src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "swagger": "node ./swagger"
+    "swagger": "node ./swagger.mjs"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
