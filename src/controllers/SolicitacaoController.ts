@@ -79,14 +79,38 @@ class SolicitacaoController {
             const { id } = req.params
             const { idUsuario, roleUsuario } = req.body
 
-            const deletedSolicitacao = await prismaClient.solicitacao.delete({
+            const solicitacao = await prismaClient.solicitacao.findFirst({
                 where: {
                     id: parseInt(id),
-                    idSolicitante: roleUsuario == 'CLIENTE' ? idUsuario : undefined
                 }
             })
 
-            res.status(200).json(deletedSolicitacao)
+            if (solicitacao) {
+                if (roleUsuario === 'ADMINISTRADOR') {
+                    await prismaClient.solicitacao.delete({
+                        where: { id: solicitacao.id }
+                    })
+                }
+                else {
+                    if (solicitacao?.status === 'PENDENTE') {
+                        if (solicitacao.idSolicitante == idUsuario) {
+                            await prismaClient.solicitacao.delete({
+                                where: { id: solicitacao.id }
+                            })
+                            res.status(200).json({ message: 'Solicitação deletada com sucesso!' })
+                        }   
+                        else {
+                            res.status(401).json({ message: 'Esta solicitação pertence a outro usuário e você não possui permissão para deletá-la!' })
+                        }
+                    }
+                    else {
+                        res.status(401).json({ message: `Você só pode deletar permissões com status de solicitação 'PENDENTE'!` })
+                    }
+                }
+            }
+            else {
+                res.status(404).json({ message: 'Solicitação não encontrada!' })
+            }
         }
         catch (err) {
             console.warn(err)

@@ -54,7 +54,13 @@ app.patch('/:id', authMiddleware, solicitacao.update
 app.delete('/:id', authMiddleware, solicitacao.delete
     /*    
          #swagger.responses[200] = {
-            schema: { $ref: '#/definitions/Solicitacao' }
+            schema: { $ref: '#/definitions/RespostaPadrao' }
+         }
+         #swagger.responses[401] = {
+            schema: { $ref: '#/definitions/RespostaPadrao' }
+         }
+         #swagger.responses[404] = {
+            schema: { $ref: '#/definitions/RespostaPadrao' }
          }
          #swagger.responses[500] = {
             schema: { $ref: '#/definitions/RespostaPadrao' }
