@@ -1,10 +1,11 @@
+import { Request, Response } from 'express'
 import { compareSync, hashSync } from 'bcrypt'
 
 import { prismaClient } from '../helpers/database'
 import { generateTokens } from '../helpers/auth'
 
 class UsuarioController {
-    public async login (req: any, res: any) {
+    public async login (req: Request, res: Response) {
         const { email, senha } = req.body
 
         const usuario = await prismaClient.usuario.findFirst({
