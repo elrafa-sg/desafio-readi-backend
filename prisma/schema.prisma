@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CLIENTE
+  OPERADOR
+  ADMINISTRADOR
+}
+
+enum Certidao {
+  CASAMENTO
+  NASCIMENTO
+  IMOVEL
+}
+
+enum StatusSolicitacao {
+  PENDENTE
+  EMITIDA
+  NEGADA
+}
+
+model Usuario {
+  id          Int           @id @default(autoincrement())
+  senha       String        @db.VarChar(255)
+  email       String        @db.VarChar(255)
+  role        Role          @default(CLIENTE)
+  Solicitacao Solicitacao[]
+}
+
+model Solicitacao {
+  id             Int                @id @default(autoincrement())
+  solicitante    Usuario            @relation(fields: [idSolicitante], references: [id])
+  idSolicitante  Int
+  nome           String             @db.VarChar(255)
+  cpf            String             @db.Char(11)
+  telefone       String             @db.VarChar(11)
+  dataNascimento String             @db.VarChar(11)
+  logradouro     String             @db.VarChar(255)
+  numero         String             @db.VarChar(6)
+  cidade         String             @db.VarChar(255)
+  uf             String             @db.Char(2)
+  cep            String             @db.Char(6)
+  certidao       Certidao           @default(CASAMENTO)
+  urlCertidao    String?            @db.VarChar(255)
+  status         StatusSolicitacao  @default(PENDENTE) 
+}
