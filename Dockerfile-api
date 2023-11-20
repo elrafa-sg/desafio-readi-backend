@@ -15,7 +15,7 @@ FROM node:alpine
 
 WORKDIR /app
 
-COPY package.json .
+COPY package.json .env ./
 COPY --from=builder ./app/prisma/ ./prisma/
 COPY --from=builder ./app/dist ./dist/
 
