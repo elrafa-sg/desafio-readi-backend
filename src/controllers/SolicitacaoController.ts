@@ -7,7 +7,7 @@ class SolicitacaoController {
             const { idUsuario, roleUsuario } = req.body
 
             const listaSolicitacoes = await prismaClient.solicitacao.findMany({
-                where: { idSolicitante: roleUsuario == 'CLIENTE' ? idUsuario : undefined }
+                where: { idSolicitante: roleUsuario === 'CLIENTE' ? idUsuario : undefined }
             })
 
             res.status(200).json(listaSolicitacoes)
@@ -24,7 +24,7 @@ class SolicitacaoController {
             const solicitacao = await prismaClient.solicitacao.findFirst({
                 where: {
                     id: parseInt(id),
-                    idSolicitante: roleUsuario == 'CLIENTE' ? idUsuario : undefined
+                    idSolicitante: roleUsuario === 'CLIENTE' ? idUsuario : undefined
                 }
             })
 
@@ -54,19 +54,49 @@ class SolicitacaoController {
     public async update (req: Request, res: Response) {
         try {
             const { id } = req.params
-            const { idUsuario, roleUsuario, status } = req.body
+            const { roleUsuario, status } = req.body
 
-            const updatedSolicitacao = await prismaClient.solicitacao.update({
-                where: {
-                    id: parseInt(id),
-                    idSolicitante: roleUsuario == 'CLIENTE' ? idUsuario : undefined
-                },
-                data: {
-                    status: status
+            if (roleUsuario === 'CLIENTE') {
+                res.status(403).json({ message: 'Você não possui permissão para alterar solicitações!' })
+            }
+            else {
+                const solicitacao = await prismaClient.solicitacao.findFirst({
+                    where: { id: parseInt(id) }
+                })
+
+                if (solicitacao) {
+                    if (roleUsuario === 'OPERADOR') {
+                        if (solicitacao.status === 'EMITIDA') {
+                            res.status(403).json({ message: `Você não pode alterar solicitações com status 'EMITIDA'!` })
+                        }
+                        else {
+                            await prismaClient.solicitacao.update({
+                                where: {
+                                    id: parseInt(id)
+                                },
+                                data: {
+                                    status: status
+                                }
+                            })
+                            res.status(200).json({ message: 'Solicitação atualizada com sucesso!' })
+                        }
+                    }
+                    else if (roleUsuario === 'ADMINISTRADOR') {
+                        await prismaClient.solicitacao.update({
+                            where: {
+                                id: parseInt(id)
+                            },
+                            data: {
+                                status: status
+                            }
+                        })
+                        res.status(200).json({ message: 'Solicitação atualizada com sucesso!' })
+                    }
                 }
-            })
-
-            res.status(200).json(updatedSolicitacao)
+                else {
+                    res.status(404).json({ message: 'Solicitação não encontrada!' })
+                }
+            }
         }
         catch (err) {
             console.warn(err)
@@ -90,6 +120,7 @@ class SolicitacaoController {
                     await prismaClient.solicitacao.delete({
                         where: { id: solicitacao.id }
                     })
+                    res.status(200).json({ message: 'Solicitação deletada com sucesso!' })
                 }
                 else {
                     if (solicitacao?.status === 'PENDENTE') {
@@ -98,13 +129,13 @@ class SolicitacaoController {
                                 where: { id: solicitacao.id }
                             })
                             res.status(200).json({ message: 'Solicitação deletada com sucesso!' })
-                        }   
+                        }
                         else {
-                            res.status(401).json({ message: 'Esta solicitação pertence a outro usuário e você não possui permissão para deletá-la!' })
+                            res.status(403).json({ message: 'Esta solicitação pertence a outro usuário e você não possui permissão para deletá-la!' })
                         }
                     }
                     else {
-                        res.status(401).json({ message: `Você só pode deletar permissões com status de solicitação 'PENDENTE'!` })
+                        res.status(403).json({ message: `Você só pode deletar permissões com status de solicitação 'PENDENTE'!` })
                     }
                 }
             }

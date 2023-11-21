@@ -12,6 +12,9 @@ app.get('/', authMiddleware, solicitacao.get
         #swagger.responses[200] = {
             schema: { $ref: '#/definitions/ListaSolicitacao' }
         }
+        #swagger.responses[401] = {
+            schema: { $ref: '#/definitions/RespostaPadrao' }
+        }
         #swagger.responses[500] = {
             schema: { $ref: '#/definitions/RespostaPadrao' }
         }
@@ -22,6 +25,9 @@ app.get('/:id', authMiddleware, solicitacao.getById
     /*    
         #swagger.responses[200] = {
             schema: { $ref: '#/definitions/Solicitacao' }
+        }
+        #swagger.responses[401] = {
+            schema: { $ref: '#/definitions/RespostaPadrao' }
         }
         #swagger.responses[500] = {
             schema: { $ref: '#/definitions/RespostaPadrao' }
@@ -34,6 +40,9 @@ app.post('/', authMiddleware, solicitacao.create
         #swagger.responses[201] = {
             schema: { $ref: '#/definitions/Solicitacao' }
         }
+        #swagger.responses[401] = {
+            schema: { $ref: '#/definitions/RespostaPadrao' }
+        }
         #swagger.responses[500] = {
             schema: { $ref: '#/definitions/RespostaPadrao' }
         }
@@ -44,6 +53,15 @@ app.patch('/:id', authMiddleware, solicitacao.update
     /*    
         #swagger.responses[200] = {
             schema: { $ref: '#/definitions/Solicitacao' }
+        }
+        #swagger.responses[401] = {
+            schema: { $ref: '#/definitions/RespostaPadrao' }
+        }
+        #swagger.responses[403] = {
+            schema: { $ref: '#/definitions/RespostaPadrao' }
+        }
+        #swagger.responses[404] = {
+            schema: { $ref: '#/definitions/RespostaPadrao' }
         }
         #swagger.responses[500] = {
             schema: { $ref: '#/definitions/RespostaPadrao' }
@@ -57,6 +75,9 @@ app.delete('/:id', authMiddleware, solicitacao.delete
             schema: { $ref: '#/definitions/RespostaPadrao' }
          }
          #swagger.responses[401] = {
+            schema: { $ref: '#/definitions/RespostaPadrao' }
+         }
+         #swagger.responses[403] = {
             schema: { $ref: '#/definitions/RespostaPadrao' }
          }
          #swagger.responses[404] = {
