@@ -1,9 +1,23 @@
 import express from 'express'
+import multer from 'multer'
+import fs from 'fs'
 import { SolicitacaoController } from '../controllers/SolicitacaoController'
-
 import { authMiddleware } from '../middlewares/authMiddleware'
 
 const app = express.Router()
+
+const upload = multer({
+    storage: multer.diskStorage({
+        destination: function (req, file, cb) {
+            const path = `./uploads/`
+            fs.mkdirSync(path, { recursive: true })
+            return cb(null, path)
+        },
+        filename: function (req, file, cb) {
+            cb(null, `${Date.now()}.${file.mimetype.split('/')[1]}`)
+        }
+    })
+})
 
 const solicitacao = new SolicitacaoController()
 
@@ -35,8 +49,13 @@ app.get('/:id', authMiddleware, solicitacao.getById
     */
 )
 
-app.post('/', authMiddleware, solicitacao.create
-    /*    
+app.post('/', authMiddleware, upload.single('solicitacao'), solicitacao.create
+    /*  
+        #swagger.parameters['obj'] = {
+            in: 'body',
+            schema: { $ref: '#/definitions/DadosSolicitacao' }
+        }
+
         #swagger.responses[201] = {
             schema: { $ref: '#/definitions/Solicitacao' }
         }

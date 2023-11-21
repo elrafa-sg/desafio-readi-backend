@@ -16,6 +16,17 @@ const doc = {
       access_token: '',
       email: '',
     },
+    DadosSolicitacao: {
+      nome: '',
+      cpf: '',
+      telefone: '',
+      dataNascimento: '',
+      logradouro: '',
+      numero: '',
+      cidade: '',
+      uf: '',
+      cep: ''
+    },
     Solicitacao: {
       id: '',
       idSolicitante: '',

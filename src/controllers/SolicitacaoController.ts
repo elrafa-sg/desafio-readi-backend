@@ -1,5 +1,8 @@
 import { Request, Response } from 'express'
+import fs from 'fs'
 import { prismaClient } from '../helpers/database'
+import { AmazonS3 } from '../helpers/amazonS3'
+import { API_HOST, API_PORT } from '../config'
 
 class SolicitacaoController {
     public async get (req: Request, res: Response) {
@@ -38,13 +41,36 @@ class SolicitacaoController {
 
     public async create (req: Request, res: Response) {
         try {
-            const solicitacaoData = req.body
+            const { idUsuario } = req.body
+            const solicitacaoData = JSON.parse(JSON.stringify(req.body))
+            //const validMimeTypes = ['application/pdf', 'image/png']
+            const fileIsValid = true
+            //if (req.file?.mimetype && validMimeTypes.includes(req.file.mimetype)) {
+            if (fileIsValid) {
+                //const urlArquivo = `${API_HOST}:${API_PORT}/${req.file.path}`
+                const urlArquivo = 'https://www.africau.edu/images/default/sample.pdf'
 
-            const createdSolicitacao = await prismaClient.solicitacao.create({
-                data: solicitacaoData
-            })
+                await prismaClient.solicitacao.create({
+                    data: {
+                        nome: solicitacaoData.nome,
+                        cpf: solicitacaoData.cpf,
+                        telefone: solicitacaoData.telefone,
+                        dataNascimento: solicitacaoData.dataNascimento,
+                        logradouro: solicitacaoData.logradouro,
+                        numero: solicitacaoData.numero,
+                        cidade: solicitacaoData.cidade,
+                        uf: solicitacaoData.uf,
+                        cep: solicitacaoData.cep,
+                        urlCertidao: urlArquivo,
+                        idSolicitante: idUsuario
+                    }
+                })
 
-            res.status(201).json(createdSolicitacao)
+                res.status(201).json({ message: 'Solicitação criada com sucesso!' })
+            }
+            else {
+                res.status(403).json({ message: 'Formato inválido. O arquivo deve ser um arquivo .pdf ou .png' })
+            }
         } catch (err) {
             console.warn(err)
             res.status(500).json({ message: 'O servidor não conseguiu processar sua requisição. Tente novamente mais tarde!' })
