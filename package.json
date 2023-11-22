@@ -4,7 +4,7 @@
   "description": "",
   "main": "./src/index.js",
   "scripts": {
-    "predev": "npm run swagger",
+    "predev": "npx prisma migrate dev && npx prisma db seed && npm run swagger",
     "dev": "nodemon ./src/index.ts",
     "build": "tsc",
     "prestart": "npx prisma migrate dev && npx prisma db seed && npm run swagger",

@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import fs from 'fs'
 import { prismaClient } from '../helpers/database'
-import { AmazonS3 } from '../helpers/amazonS3'
 import { API_HOST, API_PORT } from '../config'
 
 class SolicitacaoController {

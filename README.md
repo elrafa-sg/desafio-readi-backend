@@ -27,11 +27,11 @@ Backend do projeto desenvolvido para o desafio de full stack da readi.
    ```
 3. Crie o container do banco de dados:
    ```
-   docker build -t drb-db -f Dockerfile-db .
+   docker build -t drb-db -f Dockerfile-db . 
    ```
 4. Execute o container com o docker:
    ```
-   docker run --name db -dp 5432:5432 -t drb-api
+   docker run --name postgres -dp 5432:5432 -t drb-db
    ```
 5. Execute projeto\*\* (versão para desenvolvimento):
    ```
@@ -48,4 +48,4 @@ Backend do projeto desenvolvido para o desafio de full stack da readi.
 
 #### \* Certifique-se de ter o [Node.js](https://nodejs.org/) e o [Docker](https://www.docker.com/) instalados.
 
-#### \*\* Antes de executar o projeto, versão teste ou produção, certifique-se de preencher as variáveis de ambiente no arquivo .env.exemplo e renomeá-lo para .env
+#### \*\* Antes de executar o projeto certifique-se de preencher as variáveis de ambiente no arquivo .env.exemplo e renomeá-lo para .env 
