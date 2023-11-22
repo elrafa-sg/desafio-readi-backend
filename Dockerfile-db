@@ -1,9 +1,6 @@
-# Use a imagem oficial do PostgreSQL alpine como base
 FROM postgres:alpine
 
-# Defina variáveis de ambiente se necessário (por exemplo, senha do banco de dados)
 ENV POSTGRES_PASSWORD=senha_segura
 ENV POSTGRES_DB=nome_do_banco
 
-# Expõe a porta padrão do PostgreSQL
 EXPOSE 5432
