@@ -5,7 +5,7 @@ const doc = {
     title: 'Readi API',
     description: 'Api para o desafio da readi',
   },
-  host: 'localhost:3000',
+  host: 'localhost:4000',
   tags: ['Usuario', 'Solicitacao'],
   definitions: {
     DadosLogin: {
